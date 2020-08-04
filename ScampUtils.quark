@@ -2,6 +2,7 @@
   name: "ScampUtils",
   summary: "Utility for communicating between SuperCollider and the Suite for Computer-Assisted Music in Python (SCAMP)",
   version: "0.5",
+  schelp: "ScampUtils",
   license: "GPL",
   copyright: "Marc Evanstein, 2020"
 )
