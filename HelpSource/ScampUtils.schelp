@@ -1,6 +1,6 @@
 TITLE:: ScampUtils
 summary:: Utilities for interacting with SCAMP
-categories:: External Control>
+categories:: External Control
 
 DESCRIPTION::
 Class containing utilities for interacting with SCAMP (Suite for Computer-Assisted Music in Python)
@@ -8,7 +8,7 @@ Class containing utilities for interacting with SCAMP (Suite for Computer-Assist
 CLASSMETHODS::
 
 METHOD::instrumentFromSynthDef
-Takes a SynthDef, adds it to the server, and sets up all of the relevant OSC listeners to receive messages from SCAMP. After passing a SynthDef to this method, play_note calls from SCAMP will result in the creation of new Synths in the server.
+Takes a SynthDef, adds it to the server, and sets up all of the relevant OSC listeners to receive messages from SCAMP. After passing a SynthDef to this method, code::play_note:: calls from SCAMP will result in the creation of new Synths in the server.
 
 ARGUMENT::synthDef
 A link::Classes/SynthDef:: with at least a "freq" or "pitch" argument, a "volume" argument, and a "gate" argument. MIDI pitch values will be sent to "pitch", hertz values will be sent to "freq", volume values will be sent to "volume", and start and stop note messages will be translated to the gate argument.
@@ -39,13 +39,14 @@ METHOD::startRecordingListener
 Starts listening for "/recording/start" and "/recording/stop" messages to control the recording of  SuperCollider output.
 
 METHOD::startQuitListener
-Starts listening for "/quit" messages, which will call 0.exit within SuperCollider.
+Starts listening for "/quit" messages, which will call code::0.exit:: within SuperCollider.
 
 EXAMPLES::
 
 Starting up a sine wave with vibrato instrument to listen to OSC messages from SCAMP:
 
-code:: ScampUtils.instrumentFromSynthDef(
+code::
+ScampUtils.instrumentFromSynthDef(
     SynthDef(\vibSynth, { |out=0, freq=440, volume=0.1, vibFreq=20, vibWidth=0.5, gate=1|
         var envelope = EnvGen.ar(Env.asr(releaseTime:0.5), gate, doneAction: 2);
         var vibHalfSteps = SinOsc.ar(vibFreq) * vibWidth;
@@ -53,5 +54,6 @@ code:: ScampUtils.instrumentFromSynthDef(
         var vibSine =  SinOsc.ar(freq * vibFreqMul) * volume / 10;
         Out.ar(out, (envelope * vibSine) ! 2);
     }, [\ir, 0.1, 0.1, 0.1, 0.1, \kr])
-) ::
+)
+::
 
