@@ -1,7 +1,9 @@
 ScampUtils {
 	classvar notesPlaying;
 	*instrumentFromSynthDef { |synthDef, prefix, initialArgs=(List.new), target, addAction='addToHead'|
-		var synthArgs = synthDef.func.def.argNames.asArray;
+		var synthArgs;
+		synthDef.add;
+		synthArgs = SynthDescLib.global.at(synthDef.name).controlNames;
 		prefix.isNil.if({ prefix = synthDef.name});
 		notesPlaying.isNil.if({
 			notesPlaying = Dictionary();
@@ -39,7 +41,7 @@ ScampUtils {
 			}, '/'++prefix++'/change_volume');
 
 			// CHANGE OTHER PARAMETERS
-			synthDef.func.def.argNames.do({ |argName|
+			synthArgs.do({ |argName|
 				if([\freq, \volume, \gate].includes(argName).not, {
 					OSCFunc({ arg msg, time, addr, recvPort;
 						var id = msg[1], value = msg[2];
@@ -53,8 +55,6 @@ ScampUtils {
 		}, {
 			Error("SCAMP SynthDef must contain at least \freq, \volume, and \gate arguments").throw;
 		});
-
-		synthDef.add;
 	}
 
 	*startSynthCompileListener { |path, responseAddress|
